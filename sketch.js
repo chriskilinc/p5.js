@@ -1,6 +1,9 @@
 const points = [];
-const limit = 500;
+const limit = 666;
 let mult = 0.01;
+let ANGLEMODE;
+let changeAngleMode = false;
+let elipseSize = 1;
 
 let r1;
 let r2;
@@ -12,7 +15,8 @@ let b2;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(30);
-  angleMode(DEGREES);
+  random(0, 1) > 0.5 ? ANGLEMODE = RADIANS : ANGLEMODE = DEGREES;
+  angleMode(ANGLEMODE);
   noiseDetail(1);
 
   let density = 75;
@@ -38,6 +42,10 @@ function setup() {
 
 function draw() {
   noStroke();
+  // ANGLEMODE == DEGREES ? ANGLEMODE = RADIANS : ANGLEMODE = DEGREES;
+  changeAngleMode ? angleMode(ANGLEMODE) : null;
+  console.log(ANGLEMODE)
+
   let max = points.length;
   for (let i = 0; i < max; i++) {
 
@@ -52,7 +60,7 @@ function draw() {
     points[i].add(createVector(cos(angle), sin(angle)));
 
     if (dist(width / 2, height / 2, points[i].x, points[i].y) < limit)
-      ellipse(points[i].x, points[i].y, 1);
+      ellipse(points[i].x, points[i].y, elipseSize);
   }
 }
 
@@ -61,6 +69,19 @@ function keyPressed(e) {
   if (e.code == "Enter") {
     saveCanvas("flowfield", "png");
   }
+}
+
+function mousePressed() {
+  changeAngleMode = true;
+  ANGLEMODE == DEGREES ? ANGLEMODE = RADIANS : ANGLEMODE = DEGREES;
+  r1 = random(255);
+  r2 = random(255);
+  g1 = random(255);
+  g2 = random(255);
+  b1 = random(255);
+  b2 = random(255);
+
+  mult = random(0.002, 0.01);
 }
 
 // CREDITS
